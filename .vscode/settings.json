@@ -1,0 +1,6 @@
+{
+  "pylint.args": [
+    "--load-plugins=pylint_django",
+    "--django-settings-module=levelup.settings" // make sure you have your project name in front of settings
+  ]
+}
