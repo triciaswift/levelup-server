@@ -1,0 +1,50 @@
+[
+  {
+    "model": "levelupapi.event",
+    "pk": 1,
+    "fields": {
+      "name": "Settlers of Catan Event",
+      "date_time": "2023-11-28 14:30",
+      "location": "Board Games Cafe",
+      "organizer": 1,
+      "game": 4,
+      "attendees": [1]
+    }
+  },
+  {
+    "model": "levelupapi.event",
+    "pk": 2,
+    "fields": {
+      "name": "World of Warcraft Event",
+      "date_time": "2023-12-04 16:00",
+      "location": "GameStop",
+      "organizer": 1,
+      "game": 3,
+      "attendees": [1]
+    }
+  },
+  {
+    "model": "levelupapi.event",
+    "pk": 3,
+    "fields": {
+      "name": "Dungeons & Dragons Event",
+      "date_time": "2023-12-08 17:30",
+      "location": "Gaming Convention Center",
+      "organizer": 1,
+      "game": 2,
+      "attendees": [1]
+    }
+  },
+  {
+    "model": "levelupapi.event",
+    "pk": 4,
+    "fields": {
+      "name": "Monopoly Event",
+      "date_time": "2023-12-15 18:00",
+      "location": "Board Games Cafe",
+      "organizer": 1,
+      "game": 1,
+      "attendees": [1]
+    }
+  }
+]
