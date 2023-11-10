@@ -1,0 +1,46 @@
+[
+  {
+    "model": "levelupapi.game",
+    "pk": 1,
+    "fields": {
+      "name": "Monopoly",
+      "manufacturer": "Parker Bros",
+      "number_of_players": 8,
+      "type": 1,
+      "creator": 1
+    }
+  },
+  {
+    "model": "levelupapi.game",
+    "pk": 2,
+    "fields": {
+      "name": "Dungeons & Dragons",
+      "manufacturer": "Hasbro",
+      "number_of_players": 7,
+      "type": 2,
+      "creator": 1
+    }
+  },
+  {
+    "model": "levelupapi.game",
+    "pk": 3,
+    "fields": {
+      "name": "World of Warcraft",
+      "manufacturer": "Blizzard Entertainment",
+      "number_of_players": 5000,
+      "type": 3,
+      "creator": 1
+    }
+  },
+  {
+    "model": "levelupapi.game",
+    "pk": 4,
+    "fields": {
+      "name": "Settlers of Catan",
+      "manufacturer": "Catan Studio",
+      "number_of_players": 6,
+      "type": 1,
+      "creator": 1
+    }
+  }
+]
