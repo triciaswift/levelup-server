@@ -38,7 +38,7 @@ def login_user(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def register_user(request): # Currently allows two of the same registrations
+def register_user(request):
     '''Handles the creation of a new gamer for authentication
 
     Method arguments:
