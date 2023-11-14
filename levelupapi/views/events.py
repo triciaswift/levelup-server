@@ -1,4 +1,5 @@
 """View module for handling requests about events"""
+from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -28,10 +29,25 @@ class EventView(ViewSet):
         Returns:
             Response -- JSON serialized list of events
         """
+        # Get query string parameter
+        game_only = self.request.query_params.get("game", None)
 
-        events = Event.objects.all()
-        serializer = EventSerializer(events, many=True)
-        return Response(serializer.data)
+        try:
+            # Start with all rows
+            events = Event.objects.all()
+            if game_only is not None:
+                try:
+                    # If game_only='num' then convert to an integer
+                    game_id = int(game_only)
+                    # Filter the queryset based on game parameter
+                    events = events.filter(game=game_id)
+                except ValueError:
+                    return Response({"error": "Invalid game id"}, status=status.HTTP_400_BAD_REQUEST)
+            serializer = EventSerializer(events, many=True)
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
 
 
 class EventOrganizerSerializer(serializers.ModelSerializer):
