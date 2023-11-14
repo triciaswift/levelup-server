@@ -2,7 +2,7 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from levelupapi.models import Event
+from levelupapi.models import Event, Game
 from django.contrib.auth.models import User
     
 
@@ -45,6 +45,13 @@ class EventOrganizerSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'full_name')
 
+class EventGameSerializer(serializers.ModelSerializer):
+    """JSON serializer for event games"""
+
+    class Meta:
+        model = Game
+        fields = ('id', 'name')
+
 
 class EventSerializer(serializers.ModelSerializer):
     """JSON serializer for events"""
@@ -52,6 +59,7 @@ class EventSerializer(serializers.ModelSerializer):
     date = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
     organizer = EventOrganizerSerializer(many=False)
+    game = EventGameSerializer(many=False)
     attendees = EventOrganizerSerializer(many=True)
 
     def get_date(self, obj):
