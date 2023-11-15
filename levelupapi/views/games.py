@@ -70,31 +70,29 @@ class GameView(ViewSet):
         try:
             # Use the ORM to get the requested game from the DB
             game = Game.objects.get(pk=pk)
-
-            if game.creator_id == request.user.id:
-
+            
+            try:
                 # Use the ORM to get the correct instance of the assigned game type
-                serializer = GameSerializer(data=request.data)
-                if serializer.is_valid():
+                game_type = GameType.objects.get(pk=request.data["type"])
+            
+                if game.creator_id == request.user.id:
 
                     # Update all properties with the values from the request payload
-                    game.name = serializer.validated_data["name"]
-                    game.manufacturer = serializer.validated_data["manufacturer"]
-                    game.number_of_players = serializer.validated_data["number_of_players"]
-                    game.type_id = serializer.validated_data["type"]
+                    game.name = request.data.get("name")
+                    game.manufacturer = request.data.get("manufacturer")
+                    game.number_of_players = request.data.get("number_of_players")
+                    game.type = game_type
 
                     # Save the updated game
                     game.save()
 
-                    serializer = GameSerializer(game, context={"request": request})
                     return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-                return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-            return Response({"message": "You did not create that game"}, status=status.HTTP_403_FORBIDDEN)
-
+                return Response({"message": "You did not create that game"}, status=status.HTTP_403_FORBIDDEN)
+            except GameType.DoesNotExist:
+                return Response({"message": "type_id does not exist"}, status=status.HTTP_404_NOT_FOUND)
         except Game.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "game_id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
 class GameCreatorSerializer(serializers.ModelSerializer):
     """JSON serializer for game organizers"""
