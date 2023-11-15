@@ -57,19 +57,16 @@ class EventView(ViewSet):
         event_date = request.data.get("date")
         event_time = request.data.get("time")
 
-        # Convert time from 12-hour format with AM/PM to 24-hour format
-        time_obj = datetime.strptime(event_time, '%I:%M %p').time()
-
         # Combine date & time into datetime object
-        event_datetime = f'{event_date} {time_obj}'
+        event_datetime = f'{event_date} {event_time}'
 
         name = request.data.get("name")
-        # Using parse_datetime
+        # Using parse_datetime: takes a string and creates a datetime object
         parsed_datetime = parse_datetime(event_datetime)
         location = request.data.get("location")
         game_name = Game.objects.get(pk=request.data["game"])
 
-        # Use the create() method shortcut or the imperative approach.
+        # Use the create() method shortcut
         event = Event.objects.create(
             name=name,
             date_time=parsed_datetime,
@@ -77,10 +74,12 @@ class EventView(ViewSet):
             organizer=request.user,
             game=game_name,
         )
-
-        # Serialize the data and send it back to the client
-        serializer = EventSerializer(event, context={"request": request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            # Serialize the data and send it back to the client
+            serializer = EventSerializer(event, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as ex:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
 
 
