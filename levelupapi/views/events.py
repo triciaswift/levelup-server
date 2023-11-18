@@ -80,6 +80,45 @@ class EventView(ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as ex:
             return Response(None, status=status.HTTP_400_BAD_REQUEST)
+        
+    def update(self, request, pk):
+        """Handle PUT requests for an event
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        try:
+            # Use the ORM to get the requested game from the DB
+            event = Event.objects.get(pk=pk)
+            
+            try:
+                # Use the ORM to get the correct instance of the assigned game
+                game = Game.objects.get(pk=request.data["game"])
+            
+                if event.organizer_id == request.user.id:
+
+                    event_date = request.data.get("date")
+                    event_time = request.data.get("time")
+                    # Combine date & time into datetime object
+                    event_datetime = f'{event_date} {event_time}'
+                    # Using parse_datetime: takes a string and creates a datetime object
+                    parsed_datetime = parse_datetime(event_datetime)
+                    # Update all properties with the values from the request payload
+                    event.name = request.data.get("name")
+                    event.location = request.data.get("location")
+                    event.date_time = parsed_datetime
+                    event.game = game
+
+                    # Save the updated event
+                    event.save()
+
+                    return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+                return Response({"message": "You did not create that event"}, status=status.HTTP_403_FORBIDDEN)
+            except Game.DoesNotExist:
+                return Response({"message": "game_id does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({"message": "event_id does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
 
 
